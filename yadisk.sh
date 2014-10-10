@@ -3,6 +3,7 @@ api_url="https://cloud-api.yandex.net/v1/disk/";
 access_token="<TOKEN_HERE>"
 screenshot_filename_format="screenshot-%Y_%m_%d-%H_%M_%S.png" 
 screenshot_save_dir="$HOME/Pictures/"
+open_in_browser="true"
 
 
 function post {
@@ -32,6 +33,10 @@ function uploadfile {
 		response=$(post "resources/?path=$filename")
 		download_href=$(getJsonValue $response "public_url")
 		notify-send "Upload complete" "Link copied to clipboard"
+		if [ $open_in_browser == "true" ]
+			then
+				tmp=$(xdg-open $download_href)
+			fi 
 		echo $download_href |  xclip -selection clipboard
 	else 
 		notify-send "Error occured" "File already exists"
